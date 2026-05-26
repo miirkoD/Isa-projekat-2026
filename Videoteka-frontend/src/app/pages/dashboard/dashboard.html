@@ -1,0 +1,27 @@
+<div class="dashboard">
+    <h2>Sistem za upravljanje videotekom</h2>
+    <p>Ulogovani ste kao {{authService.getRola()}}</p>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Filmovi</h3>
+            <p>Pregledajte i upravljajte filmovima u videoteci.</p>
+            <button routerLink="/filmovi">Idi na filmove</button>
+        </div>
+        <div class="card">
+            <h3>Clanovi</h3>
+            <p>Pregledajte i upravljajte clanovima videoteke.</p>
+            <button routerLink="/clanovi">Idi na clanove</button>
+        </div>
+        <div class="card">
+            <h3>Iznajmljivanja</h3>
+            <p>Pregledajte i upravljajte iznajmljivanjima filmova.</p>
+            <button routerLink="/iznajmljivanja">Idi na iznajmljivanja</button>
+        </div>
+        <div class="card">
+            <h3>Prodaje</h3>
+            <p>Pregledajte i upravljajte prodajama filmova.</p>
+            <button routerLink="/prodaje">Idi na prodaje</button>
+        </div>
+    </div>
+</div>

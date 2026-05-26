@@ -1,0 +1,98 @@
+<div class="container">
+  <div class="header">
+    <h2>Filmove</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormuZaDodavanje()">Dodaj film</button>
+    }
+  </div>
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+
+  <div class="pretraga">
+    <input type="text" [(ngModel)]="pretragaNaslov" placeholder="Pretraga po naslovu" />
+    <input type="text" [(ngModel)]="pretragaReziser" placeholder="Pretraga po reditelju" />
+    <select [(ngModel)]="pretragaZanr" (ngModelChange)="pretrazi()">
+      <option [ngValue]="undefined">Svi zanrovi</option>
+      @for (z of zanrovi(); track z.id) {
+        <option [ngValue]="z.id">{{ z.naziv }}</option>
+      }
+    </select>
+    <button (click)="pretrazi()">Pretrazi</button>
+    <button (click)="resetujPretragu()">Resetuj</button>
+  </div>
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>{{ editMode ? 'Izmena filma' : 'Novi film' }}</h3>
+
+      <div class="form-group">
+        <label>Naslov *</label>
+        <input type="text" [(ngModel)]="forma.naslov" />
+      </div>
+      <div class="form-group">
+        <label>Godina</label>
+        <input type="number" [(ngModel)]="forma.godina" />
+      </div>
+      <div class="form-group">
+        <label>Trajanje (min)</label>
+        <input type="number" [(ngModel)]="forma.trajanjeMin" />
+      </div>
+      <div class="form-group">
+        <label>Reditelj</label>
+        <input type="text" [(ngModel)]="forma.reziser" />
+      </div>
+      <div class="form-group">
+        <label>Zanr *</label>
+        <select [(ngModel)]="forma.zanr!.id">
+          <option [ngValue]="null">-- Izaberi zanr --</option>
+          @for (z of zanrovi(); track z.id) {
+              <option [ngValue]="z.id">{{ z.naziv }}</option>
+          }
+        </select>
+      </div>
+      @if (greska) {
+          <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="sacuvaj()">Sacuvaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+        <tr>
+            <th>Naslov</th>
+            <th>Godina</th>
+            <th>Trajanje</th>
+            <th>Reditelj</th>
+            <th>Zanr</th>
+            <th>Primerci</th>
+            @if (authService.isLoggedIn()) {
+              <th>Akcije</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (f of filmovi(); track f.id) {
+            <tr>
+                <td>{{f.naslov}}</td>
+                <td>{{f.godina}}</td>
+                <td>{{f.trajanjeMin}}</td>
+                <td>{{f.reziser}}</td>
+                <td>{{f.zanr.naziv}}</td>
+                <td>{{f.primerci?.length}}</td>
+                @if (authService.isLoggedIn()) {
+                  <td>
+                    <button (click)="otvoriFormuZaIzmenu(f)">Izmeni</button>
+                    <button (click)="obrisi(f.id)" style="margin-left: 5px;">Obrisi</button>
+                  </td>
+                }
+            </tr>
+        }
+    </tbody>
+  </table>
+</div>
