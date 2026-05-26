@@ -1,1 +1,100 @@
-<p>primerci works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Primerci</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormuZaDodavanje()">+ Dodaj primerak</button>
+    }
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>{{ editMode ? 'Izmena primerka' : 'Novi primerak' }}</h3>
+
+      <div class="form-group">
+        <label>Film *</label>
+        <select [(ngModel)]="forma.film!.id">
+          <option [ngValue]="0">-- Izaberi film --</option>
+          @for (f of filmovi(); track f.id) {
+            <option [ngValue]="f.id">{{ f.naslov }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Stanje *</label>
+        <select [(ngModel)]="forma.polovan">
+          <option [ngValue]="false">Nov</option>
+          <option [ngValue]="true">Polovan</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Status *</label>
+        <select [(ngModel)]="forma.status">
+          <option value="DOSTUPAN">Dostupan</option>
+          <option value="IZNAJMLJEN">Iznajmljen</option>
+          <option value="PRODAT">Prodat</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Cena iznajmljivanja</label>
+        <input type="number" [(ngModel)]="forma.cenaIznajmljivanja"
+               [disabled]="!forma.polovan" />
+        @if (!forma.polovan) {
+          <small>Novi primerci se ne iznajmljuju</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Cena prodaje</label>
+        <input type="number" [(ngModel)]="forma.cenaProdaje" />
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="sacuvaj()">Sačuvaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Film</th>
+        <th>Stanje</th>
+        <th>Status</th>
+        <th>Cena iznajmljivanja</th>
+        <th>Cena prodaje</th>
+        @if (authService.isLoggedIn()) {
+          <th>Akcije</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of primerci(); track p.id) {
+        <tr>
+          <td>{{ p.film?.naslov }}</td>
+          <td>{{ stanjeNaziv(p.polovan) }}</td>
+          <td>{{ p.status }}</td>
+          <td>{{ p.polovan ? (p.cenaIznajmljivanja + ' RSD') : '-' }}</td>
+          <td>{{ p.cenaProdaje }} RSD</td>
+          @if (authService.isLoggedIn()) {
+            <td>
+              <button class="btn-izmena" (click)="otvoriFormuZaIzmenu(p)">Izmeni</button>
+              <button class="btn-brisanje" (click)="obrisi(p.id)">Obriši</button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
