@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
+import { Zanr } from '../model/zanr';
 
 @Injectable({
   providedIn: 'root',
@@ -11,11 +12,11 @@ export class ZanrService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any[]>{
-    return this.http.get<any[]>(this.apiUrl);
+  getAll(): Observable<Zanr[]>{
+    return this.http.get<Zanr[]>(this.apiUrl);
   }
 
-  getById(id:number): Observable<any>{
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getById(id:number): Observable<Zanr>{
+    return this.http.get<Zanr>(`${this.apiUrl}/${id}`);
   }
 }

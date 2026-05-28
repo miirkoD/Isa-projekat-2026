@@ -7,6 +7,7 @@ import { Prodaja } from './pages/prodaja/prodaja';
 import { Admin } from './pages/admin/admin';
 import { authGuard } from './core/guards/auth-guard';
 import { adminGuard } from './core/guards/admin-guard';
+import { Clanovi } from './pages/clanovi/clanovi';
 
 export const routes: Routes = [
     {path:'', redirectTo: 'login', pathMatch: 'full'},
@@ -14,7 +15,7 @@ export const routes: Routes = [
     {path:'dashboard', component:Dashboard, canActivate: [authGuard]},
     {path:'filmovi',component:Filmovi},
     {path:'primerci',component:Primerci, canActivate: [authGuard]},
-    {path:'clanovi',component:Prodaja, canActivate: [authGuard]},
+    {path:'clanovi',component:Clanovi, canActivate: [authGuard]},
     {path:'admin',component:Admin, canActivate: [authGuard,adminGuard]},
     {path:'**', redirectTo: 'login'}
 ];

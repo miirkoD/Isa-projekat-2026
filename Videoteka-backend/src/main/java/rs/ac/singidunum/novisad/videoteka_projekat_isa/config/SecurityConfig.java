@@ -38,6 +38,7 @@ public class SecurityConfig {
         .requestMatchers("/api/auth/**").permitAll()
         .requestMatchers("/api/filmovi/**").permitAll()
         .requestMatchers("/api/zanrovi/**").permitAll()
+        .requestMatchers("/api/clanovi/**").permitAll()
         .requestMatchers("/api/korisnici/**").hasRole("ADMIN")
         .anyRequest().authenticated()
     ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

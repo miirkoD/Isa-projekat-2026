@@ -1,1 +1,96 @@
-<p>clanovi works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Članovi</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormuZaDodavanje()">+ Dodaj člana</button>
+    }
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>{{ editMode ? 'Izmena člana' : 'Novi član' }}</h3>
+
+      <div class="form-group">
+        <label>Ime *</label>
+        <input type="text" [(ngModel)]="forma.ime" />
+      </div>
+      <div class="form-group">
+        <label>Prezime *</label>
+        <input type="text" [(ngModel)]="forma.prezime" />
+      </div>
+      <div class="form-group">
+        <label>Broj članske karte *</label>
+        <input type="text" [(ngModel)]="forma.brojClanskeKarte" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="forma.email" />
+      </div>
+      <div class="form-group">
+        <label>Telefon</label>
+        <input type="text" [(ngModel)]="forma.telefon" />
+      </div>
+      <div class="form-group">
+        <label>Aktivan</label>
+        <select [(ngModel)]="forma.aktivan">
+          <option [ngValue]="true">Da</option>
+          <option [ngValue]="false">Ne</option>
+        </select>
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="sacuvaj()">Sačuvaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Broj karte</th>
+        <th>Email</th>
+        <th>Telefon</th>
+        <th>Status</th>
+        @if (authService.isLoggedIn()) {
+          <th>Akcije</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of clanovi(); track c.id) {
+        <tr>
+          <td>{{ c.ime }}</td>
+          <td>{{ c.prezime }}</td>
+          <td>{{ c.brojClanskeKarte }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.telefon }}</td>
+          <td>
+            <span [class]="c.aktivan ? 'aktivan' : 'neaktivan'">
+              {{ c.aktivan ? 'Aktivan' : 'Neaktivan' }}
+            </span>
+          </td>
+          @if (authService.isLoggedIn()) {
+            <td>
+              <button class="btn-izmena" (click)="otvoriFormuZaIzmenu(c)">Izmeni</button>
+              @if (c.aktivan) {
+                <button class="btn-deaktivacija" (click)="deaktiviraj(c)">Deaktiviraj</button>
+              }
+              <button class="btn-brisanje" (click)="obrisi(c.id)">Obriši</button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

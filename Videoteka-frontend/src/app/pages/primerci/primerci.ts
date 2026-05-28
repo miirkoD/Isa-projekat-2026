@@ -39,14 +39,14 @@ export class Primerci implements OnInit{
   ucitajPrimerke():void{
     this.primerakService.getAll().subscribe({
       next:(data)=> this.primerci.set(data),
-      error:(err)=> this.greska="Neuspešno učitavanje primeraka"
+      error:(err)=> (this.greska="Neuspešno učitavanje primeraka" + err.message)
     })
   }
   
   ucitajFilmove():void{
     this.filmService.getAll().subscribe({
       next:(data)=> this.filmovi.set(data),
-      error:(err)=>this.greska="Neuspešno učitavanje filmova"
+      error:(err)=>(this.greska="Neuspešno učitavanje filmova" + err.message)
     })
   }
 

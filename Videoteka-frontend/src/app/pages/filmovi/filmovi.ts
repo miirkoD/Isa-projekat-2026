@@ -48,14 +48,14 @@ export class Filmovi implements OnInit {
   ucitajFilmove(): void {
     this.filmService.getAll().subscribe({
       next: (data) => (this.filmovi.set(data)),
-      error: (err) => (this.greska = 'Neuspešno učitavanje filmova'),
+      error: (err) => (this.greska = 'Neuspešno učitavanje filmova: ' + err.message),
     });
   }
 
   ucitajZanrove(): void {
     this.zanrService.getAll().subscribe({
       next: (data) => (this.zanrovi.set(data)),
-      error: (err) => (this.greska = 'Neuspešno učitavanje žanrova'),
+      error: (err) => (this.greska = 'Neuspešno učitavanje žanrova: ' + err.message),
     });
   }
 

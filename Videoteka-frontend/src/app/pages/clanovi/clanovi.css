@@ -1,0 +1,18 @@
+.aktivan {
+  color: green;
+  font-weight: bold;
+}
+
+.neaktivan {
+  color: red;
+  font-weight: bold;
+}
+
+.btn-deaktivacija {
+  background-color: #ff9800;
+  margin-right: 6px;
+}
+
+.btn-deaktivacija:hover {
+  background-color: #e65100;
+}
