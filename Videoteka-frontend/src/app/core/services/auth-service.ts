@@ -17,6 +17,7 @@ export class AuthService {
       tap(response=>{
         localStorage.setItem('token',response.token);
         localStorage.setItem('rola',response.rola);
+        localStorage.setItem('korisnikId',response.id);
       })
     );
   }
@@ -24,6 +25,7 @@ export class AuthService {
   logout():void{
     localStorage.removeItem('token');
     localStorage.removeItem('rola');
+    localStorage.removeItem('korisnikId');
     this.router.navigate(['/login']);
   }
 
@@ -41,5 +43,9 @@ export class AuthService {
 
   isAdmin():boolean{
     return this.getRola()==='ADMIN';
+  }
+
+  getKorisnikId(): number {
+    return Number(localStorage.getItem('korisnikId'));
   }
 }

@@ -147,5 +147,55 @@ public class IznajmljivanjeController {
         Iznajmljivanje saved = iznajmljivanjeService.save(entity);
         return new ResponseEntity<>(buildDTO(saved), HttpStatus.OK);
     }
+    
+    @PutMapping(path="/iznajmi")
+    public ResponseEntity<?> iznajmi(@RequestBody IznajmljivanjeDTO dto){
+    	Optional<Primerak> primerakOpt=primerakService.findById(dto.getPrimerak().getId());
+    	if(!primerakOpt.isPresent())
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	
+    	Optional<Clan> clanOpt=clanService.findById(dto.getClan().getId());
+    	if(!clanOpt.isPresent())
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	
+    	Optional<Korisnik>korisnikOpt=korisnikService.findById(dto.getKorisnik().getId());
+    	if(!korisnikOpt.isPresent())
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	try {
+    		Iznajmljivanje entity=new Iznajmljivanje(null,primerakOpt.get(),clanOpt.get(),korisnikOpt.get(),
+    				null, null, dto.getRokVracnja(), null);
+    				
+    		Iznajmljivanje saved= iznajmljivanjeService.iznajmi(entity);
+    		return new ResponseEntity<>(buildDTO(saved),HttpStatus.CREATED);
+    	}catch(RuntimeException e) {
+    		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+    	}
+    }
+    
+    @PutMapping("/vrati/{id}")
+    public ResponseEntity<?> vrati(@PathVariable("id") Long id) {
+        try {
+            Iznajmljivanje saved = iznajmljivanjeService.vrati(id);
+            return new ResponseEntity<>(buildDTO(saved), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @GetMapping("/kasnjenja")
+    public List<IznajmljivanjeDTO> getKasnjenja() {
+        List<IznajmljivanjeDTO> list = new ArrayList<>();
+        for (Iznajmljivanje e : iznajmljivanjeService.getKasnjenja())
+            list.add(buildDTO(e));
+        return list;
+    }
+    
+    @GetMapping("/clan/{clanId}")
+    public List<IznajmljivanjeDTO> getIstorijaClana(@PathVariable("clanId") Long clanId) {
+        List<IznajmljivanjeDTO> list = new ArrayList<>();
+        for (Iznajmljivanje e : iznajmljivanjeService.getIstorijaClana(clanId))
+            list.add(buildDTO(e));
+        return list;
+    }
 
 }

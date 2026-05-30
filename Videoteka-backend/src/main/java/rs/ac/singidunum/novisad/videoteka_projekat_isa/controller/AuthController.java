@@ -1,5 +1,6 @@
 package rs.ac.singidunum.novisad.videoteka_projekat_isa.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import rs.ac.singidunum.novisad.videoteka_projekat_isa.dto.LoginRequest;
 import rs.ac.singidunum.novisad.videoteka_projekat_isa.dto.LoginResponse;
+import rs.ac.singidunum.novisad.videoteka_projekat_isa.model.Korisnik;
+import rs.ac.singidunum.novisad.videoteka_projekat_isa.repository.KorisnikRepository;
 import rs.ac.singidunum.novisad.videoteka_projekat_isa.security.CustomUserDetailsService;
 import rs.ac.singidunum.novisad.videoteka_projekat_isa.utils.JwtUtil;
 
@@ -22,17 +25,22 @@ import rs.ac.singidunum.novisad.videoteka_projekat_isa.utils.JwtUtil;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
-
+	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
 	private JwtUtil jwtUtil;
+	@Autowired
 	private CustomUserDetailsService userDetailsService;
+	@Autowired
+	private KorisnikRepository korisnikRepository;
 	
 	public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-			CustomUserDetailsService userDetailsService) {
+			CustomUserDetailsService userDetailsService, KorisnikRepository korisnikRepository) {
 		super();
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
+		this.korisnikRepository=korisnikRepository;
 	}
 	
 	@PostMapping("/login")
@@ -49,6 +57,8 @@ public class AuthController {
 			
 			String token= jwtUtil.generateToken(request.getUsername(), rola);
 			
-			return ResponseEntity.ok(new LoginResponse(token,rola));
+			Korisnik korisnik=korisnikRepository.findByUsername(request.getUsername()).orElseThrow();
+			
+			return ResponseEntity.ok(new LoginResponse(token,rola,korisnik.getId()));
 	}
 }

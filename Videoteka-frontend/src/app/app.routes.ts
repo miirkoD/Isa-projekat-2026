@@ -8,6 +8,7 @@ import { Admin } from './pages/admin/admin';
 import { authGuard } from './core/guards/auth-guard';
 import { adminGuard } from './core/guards/admin-guard';
 import { Clanovi } from './pages/clanovi/clanovi';
+import { Iznajmljivanja } from './pages/iznajmljivanja/iznajmljivanja';
 
 export const routes: Routes = [
     {path:'', redirectTo: 'login', pathMatch: 'full'},
@@ -17,5 +18,6 @@ export const routes: Routes = [
     {path:'primerci',component:Primerci, canActivate: [authGuard]},
     {path:'clanovi',component:Clanovi, canActivate: [authGuard]},
     {path:'admin',component:Admin, canActivate: [authGuard,adminGuard]},
+    {path:'iznajmljivanja', component: Iznajmljivanja, canActivate: [authGuard]},
     {path:'**', redirectTo: 'login'}
 ];

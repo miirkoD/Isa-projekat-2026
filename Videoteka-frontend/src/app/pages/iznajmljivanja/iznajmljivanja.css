@@ -1,0 +1,21 @@
+.uspeh {
+  color: green;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.kasni {
+  background-color: #fff3e0 !important;
+}
+
+.status-aktivno { color: green; font-weight: bold; }
+.status-kasni { color: red; font-weight: bold; }
+.status-vraceno { color: gray; }
+
+.btn-vracanje {
+  background-color: #43a047;
+}
+
+.btn-vracanje:hover {
+  background-color: #2e7d32;
+}

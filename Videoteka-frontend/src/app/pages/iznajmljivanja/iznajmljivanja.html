@@ -1,1 +1,96 @@
-<p>iznajmljivanja works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Iznajmljivanja</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormu()">+ Novo iznajmljivanje</button>
+    }
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+  @if (uspeh) {
+    <div class="uspeh">{{ uspeh }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>Novo iznajmljivanje</h3>
+
+      <div class="form-group">
+        <label>Primerak *</label>
+        <select [(ngModel)]="forma.primerakId">
+          <option [ngValue]="0">-- Izaberi primerak --</option>
+          @for (p of primerci(); track p.id) {
+            <option [ngValue]="p.id">
+              {{ p.film?.naslov }} ({{ p.cenaIznajmljivanja }} RSD)
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Član *</label>
+        <select [(ngModel)]="forma.clanId">
+          <option [ngValue]="0">-- Izaberi člana --</option>
+          @for (c of clanovi(); track c.id) {
+            <option [ngValue]="c.id">{{ c.ime }} {{ c.prezime }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Rok vraćanja *</label>
+        <input type="date" [(ngModel)]="forma.rokVracanja" />
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="iznajmi()">Iznajmi</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Film</th>
+        <th>Član</th>
+        <th>Datum iznajmljivanja</th>
+        <th>Rok vraćanja</th>
+        <th>Datum vraćanja</th>
+        <th>Status</th>
+        @if (authService.isLoggedIn()) {
+          <th>Akcije</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (i of iznajmljivanja(); track i.id) {
+        <tr [class]="i.status === 'KASNI' ? 'kasni' : ''">
+          <td>{{ i.primerak?.film?.naslov }}</td>
+          <td>{{ i.clan?.ime }} {{ i.clan?.prezime }}</td>
+          <td>{{ i.datumIznajmljivanja }}</td>
+          <td>{{ i.rokVracanja }}</td>
+          <td>{{ i.datumVracanja || '-' }}</td>
+          <td>
+            <span [class]="'status-' + i.status?.toLowerCase()">
+              {{ i.status }}
+            </span>
+          </td>
+          @if (authService.isLoggedIn()) {
+            <td>
+              @if (i.status === 'AKTIVNO' || i.status === 'KASNI') {
+                <button class="btn-vracanje" (click)="vrati(i.id)">Vrati</button>
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
