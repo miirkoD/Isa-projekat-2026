@@ -19,5 +19,7 @@ export const routes: Routes = [
     {path:'clanovi',component:Clanovi, canActivate: [authGuard]},
     {path:'admin',component:Admin, canActivate: [authGuard,adminGuard]},
     {path:'iznajmljivanja', component: Iznajmljivanja, canActivate: [authGuard]},
+    {path:'prodaje', component: Prodaja, canActivate: [authGuard]},
+    // {path:'korisnici', component: Admin, canActivate: [authGuard,adminGuard]},
     {path:'**', redirectTo: 'login'}
 ];

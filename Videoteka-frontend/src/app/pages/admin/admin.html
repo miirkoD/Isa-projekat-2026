@@ -1,1 +1,94 @@
-<p>admin works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Admin panel — Korisnici sistema</h2>
+    <button (click)="otvoriFormuZaDodavanje()">+ Dodaj korisnika</button>
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+  @if (uspeh) {
+    <div class="uspeh">{{ uspeh }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>{{ editMode ? 'Izmena korisnika' : 'Novi korisnik' }}</h3>
+
+      <div class="form-group">
+        <label>Ime *</label>
+        <input type="text" [(ngModel)]="forma.ime" />
+      </div>
+      <div class="form-group">
+        <label>Prezime *</label>
+        <input type="text" [(ngModel)]="forma.prezime" />
+      </div>
+      <div class="form-group">
+        <label>Korisničko ime *</label>
+        <input type="text" [(ngModel)]="forma.username" />
+      </div>
+      <div class="form-group">
+        <label>Lozinka *</label>
+        <input type="password" [(ngModel)]="forma.password" />
+      </div>
+      <div class="form-group">
+        <label>Rola *</label>
+        <select [(ngModel)]="forma.rola">
+          <option value="ZAPOSLENI">Zaposleni</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="forma.aktivan">
+          <option [ngValue]="true">Aktivan</option>
+          <option [ngValue]="false">Neaktivan</option>
+        </select>
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="sacuvaj()">Sačuvaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Korisničko ime</th>
+        <th>Rola</th>
+        <th>Status</th>
+        <th>Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (k of korisnici(); track k.id) {
+        <tr>
+          <td>{{ k.ime }}</td>
+          <td>{{ k.prezime }}</td>
+          <td>{{ k.username }}</td>
+          <td>{{ k.rola }}</td>
+          <td>
+            <span [class]="k.aktivan ? 'aktivan' : 'neaktivan'">
+              {{ k.aktivan ? 'Aktivan' : 'Neaktivan' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-izmena" (click)="otvoriFormuZaIzmenu(k)">Izmeni</button>
+            @if (k.aktivan) {
+              <button class="btn-deaktivacija" (click)="deaktiviraj(k)">Deaktiviraj</button>
+            }
+            <button class="btn-brisanje" (click)="obrisi(k.id)">Obriši</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

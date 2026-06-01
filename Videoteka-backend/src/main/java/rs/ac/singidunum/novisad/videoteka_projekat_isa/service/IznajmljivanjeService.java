@@ -29,7 +29,7 @@ public class IznajmljivanjeService {
     public Optional<Iznajmljivanje> findById(Long id) {
         return iznajmljivanjeRepository.findById(id);
     }
-
+    
     public Iznajmljivanje save(Iznajmljivanje entity) {
         return iznajmljivanjeRepository.save(entity);
     }

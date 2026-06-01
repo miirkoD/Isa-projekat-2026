@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,7 +45,9 @@ public class ProdajaController {
             e.getPrimerak().getCenaIznajmljivanja(),
             e.getPrimerak().getCenaProdaje()
         );
-        ClanDTO clanDTO = new ClanDTO(
+        ClanDTO clanDTO =null;
+        	if(e.getClan()!=null) {
+        	clanDTO = new ClanDTO(
             e.getClan().getId(),
             e.getClan().getIme(),
             e.getClan().getPrezime(),
@@ -52,7 +55,8 @@ public class ProdajaController {
             e.getClan().getEmail(),
             e.getClan().getTelefon(),
             e.getClan().getAktivan()
-        );
+        	);
+        }
         KorisnikDTO korisnikDTO = new KorisnikDTO(
             e.getKorisnik().getId(),
             e.getKorisnik().getIme(),
@@ -99,48 +103,37 @@ public class ProdajaController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(path = "")
-    public ResponseEntity<ProdajaDTO> create(@RequestBody ProdajaDTO dto) {
+    @PostMapping(path = "/prodaj")
+    public ResponseEntity<?> prodaj(@RequestBody ProdajaDTO dto) {
         if (dto.getId() != null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<Primerak> primerakOpt = primerakService.findById(dto.getPrimerak().getId());
         if (!primerakOpt.isPresent())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Optional<Clan> clanOpt = clanService.findById(dto.getClan().getId());
-        if (!clanOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<Korisnik> korisnikOpt = korisnikService.findById(dto.getKorisnik().getId());
         if (!korisnikOpt.isPresent())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Prodaja entity = new Prodaja(null,primerakOpt.get(), clanOpt.get(), korisnikOpt.get(), dto.getDatumProdaje(), dto.getCena());
-        Prodaja saved = prodajaService.save(entity);
-        return new ResponseEntity<>(buildDTO(saved), HttpStatus.CREATED);
+        Clan clan=null;
+        if(dto.getClan()!=null && dto.getClan().getId()!=null) {
+        	Optional<Clan> clanOpt = clanService.findById(dto.getClan().getId());
+            if (clanOpt.isPresent()) clan = clanOpt.get();	
+        }
+        try {
+        	Prodaja entity =  new Prodaja(null,primerakOpt.get(),clan,korisnikOpt.get(),null,dto.getCena());
+        	Prodaja saved=prodajaService.prodaj(entity);
+        	return new ResponseEntity<>(buildDTO(saved), HttpStatus.CREATED);
+        }catch(RuntimeException e) {
+        	return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+        
     }
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<ProdajaDTO> update(@PathVariable("id") Long id, @RequestBody ProdajaDTO dto) {
-        Optional<Prodaja> opt = prodajaService.findById(id);
-        if (!opt.isPresent())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if (dto.getId() != null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Prodaja entity = opt.get();
-        entity.setDatumProdaje(dto.getDatumProdaje());
-        entity.setCena(dto.getCena());
-        Optional<Primerak> primerakOpt = primerakService.findById(dto.getPrimerak().getId());
-        if (!primerakOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        entity.setPrimerak(primerakOpt.get());
-        Optional<Clan> clanOpt = clanService.findById(dto.getClan().getId());
-        if (!clanOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        entity.setClan(clanOpt.get());
-        Optional<Korisnik> korisnikOpt = korisnikService.findById(dto.getKorisnik().getId());
-        if (!korisnikOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        entity.setKorisnik(korisnikOpt.get());
-        Prodaja saved = prodajaService.save(entity);
-        return new ResponseEntity<>(buildDTO(saved), HttpStatus.OK);
+    
+    @GetMapping("/clan/{clanId}")
+    public List<ProdajaDTO> getIstorijaClana(@PathVariable("clanId") Long clanId){
+    	List<ProdajaDTO> list=new ArrayList<>();
+    	for(Prodaja e: prodajaService.getIstorijaClana(clanId))
+    		list.add(buildDTO(e));
+    	return list;
     }
 
 }

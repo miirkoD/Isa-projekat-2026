@@ -144,3 +144,45 @@ button:hover {
   font-size: 13px;
   margin-bottom: 10px;
 }
+
+.uspeh {
+  color: green;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.aktivan {
+  color: green;
+  font-weight: bold;
+}
+
+.neaktivan {
+  color: red;
+  font-weight: bold;
+}
+
+.kasni {
+  background-color: #fff3e0 !important;
+}
+
+.status-aktivno { color: green; font-weight: bold; }
+.status-kasni { color: red; font-weight: bold; }
+.status-vraceno { color: gray; }
+
+.btn-vracanje {
+  background-color: #43a047;
+  margin-right: 6px;
+}
+
+.btn-vracanje:hover {
+  background-color: #2e7d32;
+}
+
+.btn-deaktivacija {
+  background-color: #ff9800;
+  margin-right: 6px;
+}
+
+.btn-deaktivacija:hover {
+  background-color: #e65100;
+}

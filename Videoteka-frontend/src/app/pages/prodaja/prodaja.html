@@ -1,1 +1,91 @@
-<p>prodaja works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Prodaja</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormu()">+ Nova prodaja</button>
+    }
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+  @if (uspeh) {
+    <div class="uspeh">{{ uspeh }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>Nova prodaja</h3>
+
+      <div class="form-group">
+        <label>Primerak *</label>
+        <select [(ngModel)]="forma.primerakId" (ngModelChange)="onPrimerakChange()">
+          <option [ngValue]="0">-- Izaberi primerak --</option>
+          @for (p of primerci(); track p.id) {
+            <option [ngValue]="p.id">
+              {{ p.film?.naslov }} ({{ p.polovan ? 'Polovan' : 'Nov' }}) — {{ p.cenaProdaje }} RSD
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="forma.bezClana" />
+          Prodaja bez članske karte
+        </label>
+      </div>
+
+      @if (!forma.bezClana) {
+        <div class="form-group">
+          <label>Član</label>
+          <select [(ngModel)]="forma.clanId">
+            <option [ngValue]="0">-- Izaberi člana --</option>
+            @for (c of clanovi(); track c.id) {
+              <option [ngValue]="c.id">{{ c.ime }} {{ c.prezime }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="form-group">
+        <label>Cena (RSD) *</label>
+        <input type="number" [(ngModel)]="forma.cena" />
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="prodaj()">Prodaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Film</th>
+        <th>Stanje</th>
+        <th>Član</th>
+        <th>Datum prodaje</th>
+        <th>Cena</th>
+        <th>Zaposleni</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (p of prodaje(); track p.id) {
+        <tr>
+          <td>{{ p.primerak?.film?.naslov }}</td>
+          <td>{{ p.primerak?.polovan ? 'Polovan' : 'Nov' }}</td>
+          <td>{{ p.clan ? (p.clan.ime + ' ' + p.clan.prezime) : 'Bez članske karte' }}</td>
+          <td>{{ p.datumProdaje }}</td>
+          <td>{{ p.cena }} RSD</td>
+          <td>{{ p.korisnik?.ime }} {{ p.korisnik?.prezime }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

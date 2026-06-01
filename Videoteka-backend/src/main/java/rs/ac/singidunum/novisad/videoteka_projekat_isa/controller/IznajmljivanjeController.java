@@ -102,24 +102,6 @@ public class IznajmljivanjeController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(path = "")
-    public ResponseEntity<IznajmljivanjeDTO> create(@RequestBody IznajmljivanjeDTO dto) {
-        if (dto.getId() != null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Optional<Primerak> primerakOpt = primerakService.findById(dto.getPrimerak().getId());
-        if (!primerakOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Optional<Clan> clanOpt = clanService.findById(dto.getClan().getId());
-        if (!clanOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Optional<Korisnik> korisnikOpt = korisnikService.findById(dto.getKorisnik().getId());
-        if (!korisnikOpt.isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        Iznajmljivanje entity = new Iznajmljivanje(null,primerakOpt.get(), clanOpt.get(), korisnikOpt.get(), dto.getDatumIznajmljivanja(),dto.getStatus(),dto.getRokVracnja(),dto.getDatumVracanja());
-        Iznajmljivanje saved = iznajmljivanjeService.save(entity);
-        return new ResponseEntity<>(buildDTO(saved), HttpStatus.CREATED);
-    }
-
     @PutMapping(path = "/{id}")
     public ResponseEntity<IznajmljivanjeDTO> update(@PathVariable("id") Long id, @RequestBody IznajmljivanjeDTO dto) {
         Optional<Iznajmljivanje> opt = iznajmljivanjeService.findById(id);
@@ -148,7 +130,7 @@ public class IznajmljivanjeController {
         return new ResponseEntity<>(buildDTO(saved), HttpStatus.OK);
     }
     
-    @PutMapping(path="/iznajmi")
+    @PostMapping(path="/iznajmi")
     public ResponseEntity<?> iznajmi(@RequestBody IznajmljivanjeDTO dto){
     	Optional<Primerak> primerakOpt=primerakService.findById(dto.getPrimerak().getId());
     	if(!primerakOpt.isPresent())

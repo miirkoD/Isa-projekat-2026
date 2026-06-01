@@ -41,6 +41,7 @@ public class SecurityConfig {
         .requestMatchers("/api/clanovi/**").permitAll()
         .requestMatchers("/api/primerci/**").permitAll()
         .requestMatchers("/api/iznajmljivanja/**").permitAll()
+        .requestMatchers("/api/prodaje/**").permitAll()
         .requestMatchers("/api/korisnici/**").hasRole("ADMIN")
         .anyRequest().authenticated()
     ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

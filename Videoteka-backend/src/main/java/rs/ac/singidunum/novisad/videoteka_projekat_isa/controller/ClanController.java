@@ -96,8 +96,8 @@ public class ClanController {
         Optional<Clan> opt = clanService.findById(id);
         if (!opt.isPresent())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if (dto.getId() != null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        if (dto.getId() != null)
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Clan entity = opt.get();
         entity.setIme(dto.getIme());
         entity.setPrezime(dto.getPrezime());
