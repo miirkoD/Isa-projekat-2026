@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="header">
+    <h2>Žanrovi</h2>
+    @if (authService.isLoggedIn()) {
+      <button (click)="otvoriFormuZaDodavanje()">+ Dodaj žanr</button>
+    }
+  </div>
+
+  @if (greska) {
+    <div class="greska">{{ greska }}</div>
+  }
+  @if (uspeh) {
+    <div class="uspeh">{{ uspeh }}</div>
+  }
+
+  @if (prikaziFormu) {
+    <div class="forma">
+      <h3>{{ editMode ? 'Izmena žanra' : 'Novi žanr' }}</h3>
+
+      <div class="form-group">
+        <label>Naziv *</label>
+        <input type="text" [(ngModel)]="forma.naziv" />
+      </div>
+      <div class="form-group">
+        <label>Opis</label>
+        <input type="text" [(ngModel)]="forma.opis" />
+      </div>
+
+      @if (greska) {
+        <div class="greska">{{ greska }}</div>
+      }
+
+      <div class="forma-akcije">
+        <button (click)="sacuvaj()">Sačuvaj</button>
+        <button class="btn-otkazivanje" (click)="otkaziFormu()">Otkaži</button>
+      </div>
+    </div>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Naziv</th>
+        <th>Opis</th>
+        @if (authService.isLoggedIn()) {
+          <th>Akcije</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (z of zanrovi(); track z.id) {
+        <tr>
+          <td>{{ z.naziv }}</td>
+          <td>{{ z.opis }}</td>
+          @if (authService.isLoggedIn()) {
+            <td>
+              <button class="btn-izmena" (click)="otvoriFormuZaIzmenu(z)">Izmeni</button>
+              <button class="btn-brisanje" (click)="obrisi(z.id)">Obriši</button>
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

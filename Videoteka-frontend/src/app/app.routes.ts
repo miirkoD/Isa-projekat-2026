@@ -9,6 +9,7 @@ import { authGuard } from './core/guards/auth-guard';
 import { adminGuard } from './core/guards/admin-guard';
 import { Clanovi } from './pages/clanovi/clanovi';
 import { Iznajmljivanja } from './pages/iznajmljivanja/iznajmljivanja';
+import { Zanrovi } from './pages/zanrovi/zanrovi';
 
 export const routes: Routes = [
     {path:'', redirectTo: 'login', pathMatch: 'full'},
@@ -20,6 +21,7 @@ export const routes: Routes = [
     {path:'admin',component:Admin, canActivate: [authGuard,adminGuard]},
     {path:'iznajmljivanja', component: Iznajmljivanja, canActivate: [authGuard]},
     {path:'prodaje', component: Prodaja, canActivate: [authGuard]},
+    {path:'zanrovi', component: Zanrovi, canActivate: [authGuard]},
     // {path:'korisnici', component: Admin, canActivate: [authGuard,adminGuard]},
     {path:'**', redirectTo: 'login'}
 ];

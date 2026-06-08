@@ -19,4 +19,16 @@ export class ZanrService {
   getById(id:number): Observable<Zanr>{
     return this.http.get<Zanr>(`${this.apiUrl}/${id}`);
   }
+
+  create(zanr: Partial<Zanr>): Observable<Zanr> {
+  return this.http.post<Zanr>(this.apiUrl, zanr);
+}
+
+update(id: number, zanr: Partial<Zanr>): Observable<Zanr> {
+  return this.http.put<Zanr>(`${this.apiUrl}/${id}`, zanr);
+}
+
+delete(id: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${id}`);
+}
 }

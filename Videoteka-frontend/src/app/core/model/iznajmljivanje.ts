@@ -9,7 +9,7 @@ export interface Iznajmljivanje {
   clan: Clan;
   korisnik: Korisnik;
   datumIznajmljivanja: string;
-  rokVracanja: string;
+  rokVracnja: string;
   datumVracanja?: string;
   status: string;
 }
